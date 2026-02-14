@@ -56,3 +56,4 @@ def load_config(path: str) -> ScanConfig:
         headers=headers,
         concurrency=concurrency,
     )
+
