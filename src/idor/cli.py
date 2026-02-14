@@ -9,7 +9,8 @@ from rich.table import Table
 
 from . import __version__
 from .config import load_config
-from .models import ScanConfig, ScanResult
+from .config import ScanConfig
+from .models import ScanResult
 from .scanner import run_scan
 from .reporter import generate_reports, open_report_dashboard
 
