@@ -1,0 +1,32 @@
+# Add to the main .gitignore above
+
+# ============================================
+# SENSITIVE DATA - NEVER COMMIT
+# ============================================
+# Authentication tokens
+*token*
+*secret*
+*password*
+*credential*
+*.key
+*.pem
+
+# Target lists
+targets.txt
+urls.txt
+endpoints.txt
+
+# Custom headers with auth
+headers.txt
+auth_headers.txt
+
+# Test results with real data
+production_scan_*
+live_test_*
+
+# Proxy configurations
+proxy_config.*
+
+# Private notes
+NOTES.md
+TODO_PRIVATE.md
