@@ -1,0 +1,51 @@
+def generate_html_report(
+    results: List[ScanResult],
+    stats: ScanStats,
+    target: str,
+    output_path: Path,
+) -> None:
+    """Generate interactive HTML dashboard using external template."""
+    from pathlib import Path
+    
+    anomalies = get_anomalies(results)
+    patterns = group_by_pattern(results)
+    
+    # Load template from file
+    template_path = Path(__file__).parent / "static" / "dashboard.html"
+    
+    if not template_path.exists():
+        print(f"Warning: Template not found at {template_path}")
+        return
+    
+    with open(template_path, "r", encoding="utf-8") as f:
+        html_template = f.read()
+    
+    # Prepare pattern data for template
+    pattern_data = []
+    for (status, length), items in sorted(
+        patterns.items(), key=lambda x: len(x[1]), reverse=True
+    ):
+        ids_str = ", ".join(str(r.id) for r in items[:15])
+        if len(items) > 15:
+            ids_str += f" ... and {len(items) - 15} more"
+        
+        pattern_data.append({
+            "status": status,
+            "length": length,
+            "count": len(items),
+            "ids": ids_str,
+        })
+    
+    # Render template
+    template = Template(html_template)
+    html_content = template.render(
+        timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        target=target,
+        stats=stats,
+        anomalies=anomalies,
+        patterns=pattern_data,
+        results=results,
+    )
+    
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write(html_content)
